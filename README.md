@@ -313,9 +313,9 @@ A simulação demonstra sessões de recarga, distribuição de potência, Load B
 
 | Evidência | Arquivo |
 |---|---|
-| Painel Geral | [Painel/dashboard_painel_geral.png](Painel/dashboard_painel_geral.png) |
-| Balanceamento | [Painel/dashboard_balanceamento.png](Painel/dashboard_balanceamento.png) |
-| Faturamento | [Painel/dashboard_faturamento.png](Painel/dashboard_faturamento.png) |
+| Painel Geral | [Dashboard/Painel/dashboard_painel_geral.png](Dashboard/Painel/dashboard_painel_geral.png) |
+| Balanceamento | [Dashboard/Painel/dashboard_balanceamento.png](Dashboard/Painel/dashboard_balanceamento.png) |
+| Faturamento | [Dashboard/Painel/dashboard_faturamento.png](Dashboard/Painel/dashboard_faturamento.png) |
 
 ### Eletroposto 3D
 
@@ -359,16 +359,39 @@ http://localhost:8000/index_V8_1_SPRINT3.html
 
 ```
 Sprint-3-Python/
-├── Painel/
-│   ├── dashboard_balanceamento.png
-│   ├── dashboard_faturamento.png
-│   └── dashboard_painel_geral.png
+├── Dashboard/
+│   ├── Painel/
+│   │   ├── dashboard_balanceamento.png
+│   │   ├── dashboard_faturamento.png
+│   │   └── dashboard_painel_geral.png
+│   ├── src/
+│   │   ├── components/dashboard/
+│   │   │   └── LiveDataProvider.tsx
+│   │   ├── lib/
+│   │   │   └── utils.ts
+│   │   └── test/
+│   │       ├── liveprovider.test.ts
+│   │       └── setup.ts
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── vitest.config.ts
+│   ├── tsconfig.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.node.json
+│   ├── components.json
+│   ├── eslint.config.js
+│   ├── postcss.config.js
+│   ├── index.html
+│   └── README.md
 ├── Eletroposto_3D/
 │   ├── eletroposto_energy_engine.png
 │   ├── eletroposto_sessao_recarga.png
 │   └── eletroposto_visao_geral.png
 ├── ARQUITETURA.md
 ├── ChargeGrid_Web.glb
+├── LICENSE
 ├── README.md
 ├── VALIDACAO.md
 └── index_V8_1_SPRINT3.html
