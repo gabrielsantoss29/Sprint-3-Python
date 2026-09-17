@@ -1,8 +1,22 @@
 # GoodWe ChargeGrid Intelligence
 
+**GoodWe Challenge 2026 — FIAP | Sprint 3**
+
+**Equipe 7 — Turma 1CCPX**
+
+| Nome | RM |
+|---|---|
+| Gabriel Barbosa Furin | 572941 |
+| Gabriel de Almeida Santos | 569395 |
+| Herbert Soares de Jesus | 571507 |
+| Lucas Kiodi Moraca | 571004 |
+| Renan Fracalossi Mano da Silva | 569610 |
+
+---
+
 Solução de gerenciamento inteligente de recarga de veículos elétricos desenvolvida para o **GoodWe Challenge 2026** — FIAP, Sprint 3.
 
-O ChargeGrid é um **único produto** com duas interfaces complementares: um **Dashboard Web** de gestão e monitoramento e um **Eletroposto 3D** de demonstração da operação simulada de uma sessão de recarga.
+O ChargeGrid é um **único produto** com duas interfaces complementares: um **Dashboard Web** de gestão e monitoramento e um **Eletroposto 3D** de demonstração da operação simulada de uma sessão de recarga. A partir desta Sprint, o projeto também conta com um **script Python** que isola a lógica de gerenciamento energético (Load Balancing e Peak Shaving) como camada de lógica pura, independente das interfaces.
 
 ---
 
@@ -23,26 +37,30 @@ Interface de gestão, monitoramento e visualização da operação.
 
 🔗 **[https://goodwe-grid-smart.lovable.app/](https://goodwe-grid-smart.lovable.app/)**
 
+### Simulador Python
+
+Script de terminal que demonstra a lógica de gerenciamento energético (potência disponível, Load Balancing e Peak Shaving) de forma independente das interfaces gráficas.
+
+| Arquivo | Descrição |
+|---|---|
+| `src/simulador/chargegrid_engine.py` | Módulo com a lógica pura (importável e testável) |
+| `src/simulador/chargegrid_simulador.py` | Script executável com logs no estilo OCPP |
+
 ### Documentação técnica
 
 | Arquivo | Conteúdo |
 |---|---|
 | [ARQUITETURA.md](ARQUITETURA.md) | Arquitetura, componentes, lógica energética e visão futura |
 | [VALIDACAO.md](VALIDACAO.md) | Casos de validação, escopo validado e limitações |
+| [docs/casos_de_uso.md](docs/casos_de_uso.md) | Casos de uso do Dashboard Web e da jornada Mobile/Eletroposto |
+| [docs/diagramas/diagrama_blocos.md](docs/diagramas/diagrama_blocos.md) | Diagrama de blocos do produto |
+| [docs/diagramas/fluxograma_sessao.md](docs/diagramas/fluxograma_sessao.md) | Fluxograma da sessão de recarga |
 
 ---
 
 ## 1. Equipe
 
-**Equipe 7 — Turma 1CCPX**
-
-| Nome | RM |
-|---|---|
-| Gabriel Barbosa Furin | 572941 |
-| Gabriel de Almeida Santos | 569395 |
-| Herbert Soares de Jesus | 571507 |
-| Lucas Kiodi Moraca | 571004 |
-| Renan Fracalossi Mano da Silva | 569610 |
+A equipe está listada no cabeçalho, no topo deste documento.
 
 ---
 
@@ -50,12 +68,13 @@ Interface de gestão, monitoramento e visualização da operação.
 
 O **GoodWe ChargeGrid Intelligence** é uma proposta de plataforma de gerenciamento energético para estações de recarga de veículos elétricos em ambientes comerciais.
 
-As duas interfaces são **complementares** e representam o mesmo conceito de produto:
+As interfaces são **complementares** e representam o mesmo conceito de produto:
 
 | Interface | Função |
 |---|---|
 | **Dashboard Web** | Gestão, monitoramento, balanceamento, logs, simulações e faturamento |
 | **Eletroposto 3D** | Demonstração da operação física/simulada da sessão de recarga |
+| **Simulador Python** | Demonstração em terminal da lógica energética (Load Balancing / Peak Shaving) |
 
 ---
 
@@ -79,7 +98,7 @@ O ChargeGrid coordena a potência disponível considerando:
 - Load Balancing;
 - Peak Shaving.
 
-O objetivo da Sprint 3 é demonstrar esse conceito por meio de um **Dashboard Web** funcional e de um **protótipo 3D interativo**.
+O objetivo da Sprint 3 é demonstrar esse conceito por meio de um **Dashboard Web** funcional, de um **protótipo 3D interativo** e de um **script Python** que evidencia a lógica energética de forma isolada e testável.
 
 ---
 
@@ -94,6 +113,7 @@ O objetivo da Sprint 3 é demonstrar esse conceito por meio de um **Dashboard We
 |---|---|
 | Dashboard Web | ✅ Implementado |
 | Eletroposto 3D | ✅ Implementado |
+| Simulador Python (lógica energética) | ✅ Implementado |
 | Fluxo da sessão de recarga | 🔶 Simulado |
 | Distribuição energética | 🔶 Simulado |
 | Load Balancing | 🔶 Simulado |
@@ -117,18 +137,30 @@ O objetivo da Sprint 3 é demonstrar esse conceito por meio de um **Dashboard We
 
 ## 6. Arquitetura
 
-```
-Fontes de energia + infraestrutura
-         ↓
-Lógica de gerenciamento / ChargeGrid
-         ↓
-Dashboard Web        Eletroposto 3D
-         ↓                  ↓
-Monitoramento        Sessão de recarga
-e automações         e distribuição
+```mermaid
+graph TD
+    subgraph Fontes["Fontes de energia e infraestrutura"]
+        Rede[Rede elétrica]
+        Solar[Geração solar]
+        ESS[Battery ESS]
+        Predio[Consumo base do prédio]
+    end
+
+    Rede --> Logica
+    Solar --> Logica
+    ESS --> Logica
+    Predio --> Logica
+
+    Logica["Lógica ChargeGrid<br/>Load Balancing / Peak Shaving"]
+
+    Logica --> Dashboard[Dashboard Web]
+    Logica --> Eletroposto[Eletroposto 3D]
+
+    Dashboard --> Monitoramento["Monitoramento, logs,<br/>simulações e faturamento"]
+    Eletroposto --> Sessao["Sessão de recarga e<br/>distribuição energética"]
 ```
 
-Para detalhes completos, consulte [ARQUITETURA.md](ARQUITETURA.md).
+Para detalhes completos, consulte [ARQUITETURA.md](ARQUITETURA.md) e [docs/diagramas/diagrama_blocos.md](docs/diagramas/diagrama_blocos.md).
 
 ---
 
@@ -153,7 +185,7 @@ O Dashboard utiliza uma camada local de dados simulados — **LiveDataProvider**
 
 > ⚠️ Os logs OCPP são **gerados localmente** e não representam comunicação OCPP real. A área de IA/Previsão é **demonstrativa** — não existe modelo de Machine Learning treinado.
 
-**Parâmetros do cenário do Dashboard** *(independentes do Eletroposto 3D)*:
+**Parâmetros do cenário do Dashboard** *(independentes do Eletroposto 3D e do Simulador Python)*:
 
 | Parâmetro | Valor |
 |---|---|
@@ -181,19 +213,29 @@ Protótipo interativo que demonstra a **operação física/simulada** do eletrop
 
 ## 9. Fluxo da sessão
 
-```
-Identificação → Configuração → Pagamento → Liberação da trava
-      → Retirada do conector → Conexão ao EV 03 → Carregamento
-      → Distribuição energética → Encerramento → Devolução → Travamento
+```mermaid
+flowchart TD
+    A[Identificação] --> B[Configuração]
+    B --> C[Pagamento]
+    C --> D[Liberação da trava]
+    D --> E[Retirada do conector]
+    E --> F[Conexão ao EV 03]
+    F --> G[Carregamento]
+    G --> H[Distribuição energética]
+    H --> I[Encerramento]
+    I --> J[Devolução]
+    J --> K[Travamento]
 ```
 
 > O fluxo é **simulado**. Não existe hardware físico, OCPP real ou processamento de pagamento real.
+
+Detalhamento de cada etapa em [docs/diagramas/fluxograma_sessao.md](docs/diagramas/fluxograma_sessao.md) e casos de uso relacionados em [docs/casos_de_uso.md](docs/casos_de_uso.md).
 
 ---
 
 ## 10. Parâmetros da simulação 3D
 
-> ⚠️ Valores **exclusivos do Eletroposto 3D** — independentes dos parâmetros do Dashboard Web.
+> ⚠️ Valores **exclusivos do Eletroposto 3D** — usados também pelo Simulador Python, e independentes dos parâmetros do Dashboard.
 
 | Parâmetro | Valor |
 |---|---|
@@ -211,7 +253,7 @@ Identificação → Configuração → Pagamento → Liberação da trava
 
 Os valores foram escolhidos para representar um **cenário comercial com restrição de demanda**. O limite da rede de 35 kW e o consumo base do prédio de 32 kW deixam uma margem inicial pequena (≈ 3 kW) para a recarga dos veículos, criando a necessidade de geração solar e Battery ESS para que os EVs possam ser carregados de forma significativa.
 
-As potências distintas dos EVs permitem demonstrar diferentes níveis de demanda e observar a atuação das regras de Load Balancing e Peak Shaving ao longo da simulação.
+As potências distintas dos EVs permitem demonstrar diferentes níveis de demanda e observar a atuação das regras de Load Balancing e Peak Shaving ao longo da simulação — tanto no Eletroposto 3D quanto no Simulador Python.
 
 > ⚠️ Esses valores são **exclusivamente simulados** e **não representam** dimensionamento elétrico real, homologação, especificação de instalação ou validação de engenharia.
 
@@ -219,18 +261,18 @@ As potências distintas dos EVs permitem demonstrar diferentes níveis de demand
 
 ## 11. Distribuição energética
 
-```
-┌──────────────────────────────────┐
-│  Rede elétrica    Geração solar  │
-│  Battery ESS      Prédio (base)  │
-└──────────────┬───────────────────┘
-               ↓
-     Lógica ChargeGrid
-     (Load Balancing / Peak Shaving)
-               ↓
-    ┌──────────┼──────────┐
-    ↓          ↓          ↓
-  EV 01      EV 02      EV 03
+```mermaid
+graph TD
+    Rede[Rede elétrica] --> Logica
+    Solar[Geração solar] --> Logica
+    ESS[Battery ESS] --> Logica
+    Predio[Prédio - consumo base] --> Logica
+
+    Logica["Lógica ChargeGrid<br/>Load Balancing / Peak Shaving"]
+
+    Logica --> EV01[EV 01]
+    Logica --> EV02[EV 02]
+    Logica --> EV03[EV 03]
 ```
 
 ---
@@ -244,6 +286,8 @@ Distribui a potência disponível entre os veículos de acordo com as condiçõe
 ### Peak Shaving *(simulado)*
 
 Quando a demanda simulada aumenta, o sistema reduz temporariamente a potência destinada aos carregadores para evitar um pico de demanda na rede.
+
+Ambas as regras estão implementadas em Python de forma pura e testável em [`src/simulador/chargegrid_engine.py`](src/simulador/chargegrid_engine.py), além de demonstradas no Dashboard e no Eletroposto 3D.
 
 ---
 
@@ -269,9 +313,28 @@ Quando a demanda simulada aumenta, o sistema reduz temporariamente a potência d
 | 3D | Three.js, GLTFLoader, PointerLockControls |
 | Modelo | GLB (ChargeGrid_Web.glb) |
 
+### Simulador Python
+
+| Categoria | Tecnologias |
+|---|---|
+| Linguagem | Python 3.9+ |
+| Dependências | Nenhuma — apenas biblioteca padrão (`dataclasses`, `math`, `time`, `datetime`, `typing`) |
+
 ---
 
-## 14. Conexão com os conteúdos da disciplina
+## 14. Justificativa técnica
+
+A escolha de tecnologias por artefato buscou equilibrar **finalidade de cada interface** com os conceitos de **eficiência energética e automação** trabalhados na disciplina:
+
+- **React + TypeScript (Dashboard Web):** um dashboard de monitoramento precisa reagir a atualizações de estado com frequência (a cada ~2 s, no `LiveDataProvider`) sem recarregar a página. O modelo de componentes do React é adequado para esse tipo de atualização reativa, e o TypeScript adiciona tipagem estática sobre entidades sensíveis do domínio energético (potência, sessões, carregadores), reduzindo a chance de erros de estado — algo especialmente relevante ao representar automações de controle de carga.
+
+- **HTML + Three.js (Eletroposto 3D):** a proposta aqui é uma demonstração **espacial** da operação física do eletroposto (posicionamento de fontes, veículos e fluxos de energia), algo mais natural em uma cena 3D do que em uma interface tabular. HTML + Three.js permite isso sem necessidade de build ou backend, o que favorece a portabilidade do protótipo (basta um servidor HTTP estático).
+
+- **Python (Simulador / lógica energética):** a lógica de cálculo de potência disponível, Load Balancing e Peak Shaving é, em essência, um problema de **regras e automação de decisão** — não de interface. Isolar essa lógica em Python puro (sem dependências externas) permite que ela seja **testada e auditada independentemente** das interfaces gráficas, reforçando a ideia de que a automação energética deveria ser uma camada própria do sistema (aproximando-se conceitualmente de um futuro "Charge Engine" — ver seção de arquitetura futura). Python também é uma linguagem comum em prototipagem de lógica de engenharia e ciência de dados, o que facilita a evolução futura para modelos de previsão de demanda.
+
+---
+
+## 15. Conexão com os conteúdos da disciplina
 
 | # | Conteúdo da disciplina | Como se aplica no ChargeGrid |
 |---|---|---|
@@ -288,26 +351,27 @@ Quando a demanda simulada aumenta, o sistema reduz temporariamente a potência d
 
 ---
 
-## 15. Uso de simulações
+## 16. Uso de simulações
 
-O Dashboard Web e o Eletroposto 3D permitem testar estratégias de automação e gerenciamento energético em um **ambiente controlado, sem risco físico**.
+O Dashboard Web, o Eletroposto 3D e o Simulador Python permitem testar estratégias de automação e gerenciamento energético em um **ambiente controlado, sem risco físico**.
 
 A simulação demonstra sessões de recarga, distribuição de potência, Load Balancing, Peak Shaving, geração solar, Battery ESS e indicadores operacionais (energia, tempo, custo, percentual renovável), funcionando como uma **validação de conceito** antes de uma eventual implementação física.
 
 ---
 
-## 16. Resultados funcionais
+## 17. Resultados funcionais
 
 - Dashboard Web publicado e acessível via navegador.
 - Eletroposto 3D funcional com o fluxo completo da sessão demonstrado.
+- Simulador Python executável em terminal, com lógica energética isolada e testável.
 - Distribuição energética simulada com EV 01, EV 02, EV 03, geração solar e Battery ESS.
 - Logs operacionais com nomenclatura inspirada em OCPP.
-- Load Balancing e Peak Shaving demonstrados nas duas interfaces.
+- Load Balancing e Peak Shaving demonstrados nas três interfaces.
 - Indicadores em tempo real: demanda, energia, custo, percentual renovável.
 
 ---
 
-## 17. Evidências
+## 18. Evidências
 
 ### Dashboard Web
 
@@ -327,7 +391,30 @@ A simulação demonstra sessões de recarga, distribuição de potência, Load B
 
 ---
 
-## 18. Como executar
+## 19. Demonstração e Resultados (Simulador Python)
+
+Execução de exemplo do `chargegrid_simulador.py`, usando os parâmetros do Eletroposto 3D (rede 35 kW, prédio 32 kW, ESS 60 kWh/72%, EV01 18 kW, EV02 12 kW, EV03-Fast 28 kW). A demanda total dos três veículos (58 kW) supera a potência disponível, o que aciona o Peak Shaving a cada passo, enquanto o Load Balancing distribui a potência resultante entre os veículos:
+
+```
+[23:03:22] BootNotification     Eletroposto conectado - status: Available
+[23:03:22] Authorize            Usuario identificado - sessao autorizada
+[23:03:22] StartTransaction     Modo selecionado: EV03-Fast (28 kW) - conector liberado
+[00:03:22] MeterValues          solar=1.6kW ess=15.0kW disponivel=19.6kW | EV01=5.5kW, EV02=3.6kW, EV03-Fast=8.5kW
+[00:03:22] StatusNotification   Peak Shaving ACIONADO - demanda 58.0kW > disponivel 19.6kW -> potencia total reduzida para 17.6kW
+...
+[08:03:22] StopTransaction      Sessao encerrada pelo usuario
+[08:03:22] StatusNotification   Conector devolvido - trava reativada
+```
+
+> 📷 **Placeholder de evidência:** um print completo da execução do terminal será adicionado aqui por outro integrante da equipe (ex.: `docs/evidencias/simulador_python_terminal.png`).
+
+| Evidência | Arquivo |
+|---|---|
+| Execução do terminal (completa) | *(a ser adicionado)* |
+
+---
+
+## 20. Como executar
 
 ### Dashboard Web
 
@@ -353,9 +440,18 @@ http://localhost:8000/index_V8_1_SPRINT3.html
 
 > ⚠️ Abrir o `.html` diretamente como arquivo local pode bloquear o carregamento do modelo 3D. Use sempre o servidor HTTP.
 
+### Simulador Python
+
+```bash
+pip install -r requirements.txt
+python src/simulador/chargegrid_simulador.py
+```
+
+> Não há dependências externas — o `requirements.txt` existe para documentar o processo de instalação, mas o script roda apenas com a biblioteca padrão do Python (>= 3.9).
+
 ---
 
-## 19. Estrutura do repositório
+## 21. Estrutura do repositório
 
 ```
 Sprint-3-Python/
@@ -389,39 +485,51 @@ Sprint-3-Python/
 │   ├── eletroposto_energy_engine.png
 │   ├── eletroposto_sessao_recarga.png
 │   └── eletroposto_visao_geral.png
+├── docs/
+│   ├── casos_de_uso.md
+│   └── diagramas/
+│       ├── diagrama_blocos.md
+│       └── fluxograma_sessao.md
+├── src/
+│   └── simulador/
+│       ├── chargegrid_engine.py
+│       └── chargegrid_simulador.py
 ├── ARQUITETURA.md
 ├── ChargeGrid_Web.glb
 ├── LICENSE
 ├── README.md
+├── requirements.txt
 ├── VALIDACAO.md
 └── index_V8_1_SPRINT3.html
 ```
 
 ---
 
-## 20. Limitações
+## 22. Limitações
 
 - O Dashboard utiliza **dados simulados/localmente gerados** — não existe backend de produção.
 - O Eletroposto 3D utiliza **simulação** — não existe hardware físico.
+- O Simulador Python é uma **prova de conceito de lógica** — não está integrado a nenhuma das interfaces gráficas nem a hardware real.
 - Os logs são **inspirados em OCPP**, mas **não representam comunicação OCPP real**.
 - A área de IA/Previsão é **demonstrativa** — não existe modelo de Machine Learning treinado.
 - O faturamento é **simulado** — não existe processamento financeiro real.
-- Não existe banco de dados persistente, integração física com carregadores GoodWe, Edge Gateway físico, pagamento real ou ML treinado e validado.
+- Não existe banco de dados persistente, integração física com carregadores GoodWe, Edge Gateway físico, pagamento real, aplicativo mobile publicado ou ML treinado e validado.
 - Todos os valores de potência, energia, custo e demais indicadores são **exclusivamente demonstrativos**.
 
 Para detalhes completos sobre o escopo validado e não validado, consulte [VALIDACAO.md](VALIDACAO.md).
 
 ---
 
-## 21. Arquitetura futura e próximos passos
+## 23. Arquitetura futura e próximos passos
 
 A arquitetura futura planejada inclui componentes ainda não implementados:
 
-- Backend / Charge Engine
+- Backend / Charge Engine (possivelmente evoluído a partir da lógica em `src/simulador/chargegrid_engine.py`)
 - Banco de dados persistente
 - CSMS / OCPP real
 - Edge Gateway (ex: Raspberry Pi)
 - Integração física com equipamentos GoodWe
+- Aplicativo mobile (ver casos de uso conceituais em [docs/casos_de_uso.md](docs/casos_de_uso.md))
 - ML / Previsões treinadas com dados históricos
 - Pagamentos reais (PIX, cartão)
 
@@ -429,10 +537,13 @@ A arquitetura futura planejada inclui componentes ainda não implementados:
 
 ---
 
-## 22. Links e documentação
+## 24. Links e documentação
 
 | Recurso | Link |
 |---|---|
 | Dashboard Web | [https://goodwe-grid-smart.lovable.app/](https://goodwe-grid-smart.lovable.app/) |
 | Arquitetura | [ARQUITETURA.md](ARQUITETURA.md) |
 | Validação | [VALIDACAO.md](VALIDACAO.md) |
+| Casos de uso | [docs/casos_de_uso.md](docs/casos_de_uso.md) |
+| Diagrama de blocos | [docs/diagramas/diagrama_blocos.md](docs/diagramas/diagrama_blocos.md) |
+| Fluxograma da sessão | [docs/diagramas/fluxograma_sessao.md](docs/diagramas/fluxograma_sessao.md) |
