@@ -1,0 +1,3 @@
+# GoodWe ChargeGrid Intelligence - Simulador Python
+# Nenhuma dependencia externa e necessaria: o script utiliza apenas a
+# biblioteca padrao do Python (>= 3.9).
