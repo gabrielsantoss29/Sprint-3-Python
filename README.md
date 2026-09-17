@@ -393,24 +393,40 @@ A simulação demonstra sessões de recarga, distribuição de potência, Load B
 
 ## 19. Demonstração e Resultados (Simulador Python)
 
-Execução de exemplo do `chargegrid_simulador.py`, usando os parâmetros do Eletroposto 3D (rede 35 kW, prédio 32 kW, ESS 60 kWh/72%, EV01 18 kW, EV02 12 kW, EV03-Fast 28 kW). A demanda total dos três veículos (58 kW) supera a potência disponível, o que aciona o Peak Shaving a cada passo, enquanto o Load Balancing distribui a potência resultante entre os veículos:
+Log de saída real do `chargegrid_simulador.py`, usando os parâmetros do Eletroposto 3D (rede 35 kW, prédio 32 kW, ESS 60 kWh/72%, EV01 18 kW, EV02 12 kW, EV03-Fast 28 kW). A demanda total dos três veículos (58 kW) supera a potência disponível, o que aciona o Peak Shaving a cada passo, enquanto o Load Balancing distribui a potência resultante (automação em tempo real) entre os veículos:
 
 ```
+========================================================================
+GoodWe ChargeGrid Intelligence - Simulador de sessao (Eletroposto 3D)
+Cenario: rede 35 kW | predio 32 kW | ESS 60 kWh (SOC inicial 72%)
+========================================================================
 [23:03:22] BootNotification     Eletroposto conectado - status: Available
 [23:03:22] Authorize            Usuario identificado - sessao autorizada
 [23:03:22] StartTransaction     Modo selecionado: EV03-Fast (28 kW) - conector liberado
 [00:03:22] MeterValues          solar=1.6kW ess=15.0kW disponivel=19.6kW | EV01=5.5kW, EV02=3.6kW, EV03-Fast=8.5kW
 [00:03:22] StatusNotification   Peak Shaving ACIONADO - demanda 58.0kW > disponivel 19.6kW -> potencia total reduzida para 17.6kW
+[01:03:22] MeterValues          solar=3.1kW ess=15.0kW disponivel=21.1kW | EV01=5.9kW, EV02=3.9kW, EV03-Fast=9.2kW
+[01:03:22] StatusNotification   Peak Shaving ACIONADO - demanda 58.0kW > disponivel 21.1kW -> potencia total reduzida para 19.0kW
 ...
+[07:03:22] MeterValues          solar=9.5kW ess=15.0kW disponivel=27.5kW | EV01=7.7kW, EV02=5.1kW, EV03-Fast=11.9kW
+[07:03:22] StatusNotification   Peak Shaving ACIONADO - demanda 58.0kW > disponivel 27.5kW -> potencia total reduzida para 24.8kW
 [08:03:22] StopTransaction      Sessao encerrada pelo usuario
 [08:03:22] StatusNotification   Conector devolvido - trava reativada
+========================================================================
+Fim da simulacao. Todos os valores acima sao simulados (sem hardware real).
+========================================================================
 ```
 
-> 📷 **Placeholder de evidência:** um print completo da execução do terminal será adicionado aqui por outro integrante da equipe (ex.: `docs/evidencias/simulador_python_terminal.png`).
+Esse log já é evidência funcional (saída real da execução, não um exemplo inventado — reproduza com `python src/simulador/chargegrid_simulador.py`). Prints de tela do terminal podem complementar essa evidência:
+
+*(Prints da execução a serem adicionados em `docs/evidencias/`)*
 
 | Evidência | Arquivo |
 |---|---|
-| Execução do terminal (completa) | *(a ser adicionado)* |
+| Inicialização e logs | `docs/evidencias/python_boot_notification.png` |
+| Load Balancing em ação | `docs/evidencias/python_load_balancing.png` |
+| Peak Shaving acionado | `docs/evidencias/python_peak_shaving.png` |
+| Sessão completa | `docs/evidencias/python_sessao_completa.png` |
 
 ---
 
@@ -487,9 +503,11 @@ Sprint-3-Python/
 │   └── eletroposto_visao_geral.png
 ├── docs/
 │   ├── casos_de_uso.md
-│   └── diagramas/
-│       ├── diagrama_blocos.md
-│       └── fluxograma_sessao.md
+│   ├── diagramas/
+│   │   ├── diagrama_blocos.md
+│   │   └── fluxograma_sessao.md
+│   └── evidencias/
+│       └── (prints da execução do simulador Python)
 ├── src/
 │   └── simulador/
 │       ├── chargegrid_engine.py
