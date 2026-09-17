@@ -409,7 +409,30 @@ Para uma implementação de produção, seriam necessários:
 
 ---
 
-## 17. Limitações
+## 17. Simulador Python — camada de lógica isolada
+
+A partir desta Sprint, a lógica de gerenciamento energético descrita nas seções 4, 10 e 11 também está implementada como código Python puro, independente das interfaces gráficas:
+
+| Arquivo | Papel |
+|---|---|
+| `src/simulador/chargegrid_engine.py` | Funções puras: potência disponível, Load Balancing (`balancear_carga`) e Peak Shaving (`aplicar_peak_shaving`) |
+| `src/simulador/chargegrid_simulador.py` | Script executável que roda uma sessão simulada no terminal, com logs no estilo OCPP, usando os parâmetros do Eletroposto 3D |
+
+O objetivo dessa camada é servir como **prova de conceito da lógica de decisão**, separada da apresentação (React/TypeScript ou Three.js). Por não depender de UI, ela pode ser importada e testada isoladamente — por exemplo, verificando que o Peak Shaving nunca aloca mais potência do que a efetivamente disponível, ou que o Load Balancing nunca ultrapassa o limite individual de cada veículo.
+
+> ⚠️ Assim como as demais camadas do protótipo, o Simulador Python é **simulado**: os valores de geração solar e de potência do Battery ESS seguem perfis matemáticos simplificados, sem leitura de sensores reais.
+
+Diagramas complementares desta arquitetura estão disponíveis em:
+
+| Diagrama | Arquivo |
+|---|---|
+| Diagrama de blocos do produto | [docs/diagramas/diagrama_blocos.md](docs/diagramas/diagrama_blocos.md) |
+| Fluxograma da sessão de recarga | [docs/diagramas/fluxograma_sessao.md](docs/diagramas/fluxograma_sessao.md) |
+| Casos de uso (Dashboard e Mobile/Eletroposto) | [docs/casos_de_uso.md](docs/casos_de_uso.md) |
+
+---
+
+## 18. Limitações
 
 - O Dashboard utiliza **dados locais simulados** — não existe backend, banco de dados ou integração real.
 - O Eletroposto 3D utiliza **simulação interna em JavaScript** — não existe hardware físico.

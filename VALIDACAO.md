@@ -180,7 +180,22 @@ A validação tem como propósito confirmar que as funcionalidades demonstradas 
 
 ---
 
-## 10. Validação da conexão com a disciplina
+## 10. Validação do Simulador Python
+
+| ID | Caso de teste | Resultado esperado | Status |
+|---|---|---|---|
+| PY-01 | Executar `python src/simulador/chargegrid_simulador.py` | Script roda do início ao fim sem erros ou exceções | ✅ Válido |
+| PY-02 | Verificar logs no estilo OCPP | Sequência BootNotification → Authorize → StartTransaction → MeterValues (repetido) → StopTransaction gerada corretamente | ✅ Válido |
+| PY-03 | Verificar Peak Shaving acionado | Com EV01 (18 kW) + EV02 (12 kW) + EV03-Fast (28 kW) = 58 kW de demanda, superior à potência disponível simulada, o evento "Peak Shaving ACIONADO" aparece nos logs | ✅ Válido |
+| PY-04 | Verificar que a potência alocada não excede a disponível | Soma das potências alocadas aos veículos (`balancear_carga`) é sempre ≤ potência disponível calculada no passo | ✅ Válido |
+| PY-05 | Verificar limite individual de cada veículo | Nenhum veículo recebe potência alocada acima do seu `potencia_max_kw` | ✅ Válido |
+| PY-06 | Importar `chargegrid_engine` isoladamente | Módulo é importável sem executar o script de simulação (nenhum efeito colateral no import) | ✅ Válido |
+
+> ⚠️ Os valores de geração solar e potência do Battery ESS usados no script seguem perfis matemáticos simplificados (`geracao_solar_kw`, `potencia_ess_kw`) — não representam leitura de sensores reais.
+
+---
+
+## 11. Validação da conexão com a disciplina
 
 | Conteúdo | Evidência no protótipo | Status |
 |---|---|---|
@@ -197,7 +212,7 @@ A validação tem como propósito confirmar que as funcionalidades demonstradas 
 
 ---
 
-## 11. Escopo validado
+## 12. Escopo validado
 
 O protótipo funcional entregue na Sprint 3 demonstra:
 
@@ -210,11 +225,12 @@ O protótipo funcional entregue na Sprint 3 demonstra:
 - Simulador "E Se..." com recálculo de cenários energéticos;
 - Logs com nomenclatura inspirada em OCPP;
 - Indicadores de tempo, energia, custo e percentual renovável;
-- Fluxo completo da sessão no Eletroposto 3D (identificação → travamento).
+- Fluxo completo da sessão no Eletroposto 3D (identificação → travamento);
+- Simulador Python executável em terminal, com Load Balancing e Peak Shaving demonstrados de forma isolada e testável.
 
 ---
 
-## 12. Escopo não validado
+## 13. Escopo não validado
 
 Os itens abaixo estão **fora do escopo da Sprint 3** e pertencem à arquitetura futura planejada:
 
@@ -230,7 +246,7 @@ Os itens abaixo estão **fora do escopo da Sprint 3** e pertencem à arquitetura
 
 ---
 
-## 13. Limitações dos testes
+## 14. Limitações dos testes
 
 - Todos os testes foram realizados com **dados simulados** — sem conexão com hardware físico ou serviços externos.
 - A validação do Dashboard depende do acesso ao link publicado no Lovable — qualquer indisponibilidade do serviço impede a validação online.
@@ -240,7 +256,7 @@ Os itens abaixo estão **fora do escopo da Sprint 3** e pertencem à arquitetura
 
 ---
 
-## 14. Interpretação
+## 15. Interpretação
 
 Esta validação representa uma **validação funcional de conceito**, não uma homologação de instalação comercial.
 
@@ -250,12 +266,13 @@ Os protótipos entregues cumprem esse propósito dentro do escopo acadêmico da 
 
 ---
 
-## 15. Síntese final
+## 16. Síntese final
 
 | Aspecto | Resultado |
 |---|---|
 | Dashboard Web funcional | ✅ |
 | Eletroposto 3D funcional | ✅ |
+| Simulador Python funcional | ✅ |
 | Fluxo da sessão demonstrado | ✅ |
 | Load Balancing demonstrado | ✅ |
 | Peak Shaving demonstrado | ✅ |
